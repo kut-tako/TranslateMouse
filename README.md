@@ -2,7 +2,9 @@
 
 英単語にカーソルを合わせた状態でキーを押すと英単語の翻訳がアプリのウィンドウに表示されます。
 
-TranslateMouseは、スクリーンショットを取り、画像内のテキストをOCR（光学式文字認識）で抽出し、翻訳するアプリケーションです。ユーザーはマウスの位置を指定して、簡単にテキストをキャプチャし、翻訳結果を得ることができます。
+TranslateMouseは、英単語の意味を素早く調べることに特化したアプリです。  
+**マウス周辺のみ**のスクリーンショットを取り、画像内のテキストをOCR（光学式文字認識）で抽出し、翻訳します。  
+ユーザーはマウスの位置を指定して、簡単にテキストをキャプチャし、英単語の意味を知ることができます。
 
 ## 機能
 
@@ -16,11 +18,20 @@ TranslateMouseは、スクリーンショットを取り、画像内のテキス
 
 - Python 3.x
 - 必要なライブラリ:
-  - `pytesseract`
+  - `certifi`
+  - `charset-normalizer`
+  - `deepl`
+  - `idna`
+  - `mss`
+  - `numpy`
   - `Pillow`
+  - `pynput`
+  - `pyocr`
+  - `python-dotenv`
   - `pywin32`
-  - `tkinter`
-  - `re`
+  - `requests`
+  - `six`
+  - `urllib3`
 
 ## インストール
 
@@ -37,7 +48,16 @@ TranslateMouseは、スクリーンショットを取り、画像内のテキス
    pip install -r requirements.txt
    ```
 
-3. Tesseract OCRをインストールします。インストール後、Tesseractのパスを設定してください。
+3. TranslateMouseと同じフォルダ階層に.envを作成してください。
+
+   ```.env
+   DEEPL_API_KEY="YOUR DEEPL_API_KEY"
+   TESSERACT_PATH="YOUR INSTALLED TESSERACT_PATH"
+   ```
+
+4. Tesseract OCRをインストールします。インストール後、Tesseractのパスを.envのTESSERACT_PATHに設定してください。
+
+5. DEEPL APIキーを.envファイルのDEEPL_API_KEYに設定してください。
 
 ## 使用方法
 
@@ -52,3 +72,12 @@ TranslateMouseは、スクリーンショットを取り、画像内のテキス
 3. ショートカットキー（Shift + a）を押してスクリーンショットを取得し、OCRを実行してテキストを認識します。
 
 4. 認識したテキストが表示され、翻訳結果が得られます。
+
+## 開発予定
+
+- 設定機能追加
+  - 任意のショートカットキー
+  - スクリーンショット範囲
+- 翻訳機能の追加（DeepL以外の方法での翻訳）
+- 翻訳結果をマウスとの相対位置に表示できるように
+- スクリーンショットの編集機能（OCR精度を向上させるため）
