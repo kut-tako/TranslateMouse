@@ -28,7 +28,7 @@ class Window:
         self.root.attributes('-topmost', True);
         self.frame.grid();
         self.label.grid(column=0, row=0);
-        self.update_label("Waiting...");
+        self._update_label("Waiting...");
 
     def main_loop(self):
         """Run the main event loop."""
@@ -53,7 +53,7 @@ class Window:
         self.set_mouse_position(pos[0], pos[1]);
         self.root.after(50, self.update_mouse_position);
 
-    def update_label(self, text):
+    def _update_label(self, text):
         """Update the label text."""
         self.label.config(text=text);
     
@@ -62,19 +62,19 @@ class Window:
         print("translate_process");
 
         img_name = self._take_screenshot();
-        text_list = self._get_text_from_ocr(img_name);
-        if not text_list:
+        word_list = self._get_text_from_ocr(img_name);
+        if not word_list:
             print("No text found, skipping further processing.")
-            self.update_label("文字検出無し");
+            self._update_label("文字検出無し");
             return
 
-        text = self._check_text_position(text_list);
-        if not text:
-            self.update_label("翻訳対象無し");
+        word = self._check_text_position(word_list);
+        if not word:
+            self._update_label("翻訳対象無し");
             return;
 
-        translate_result = self.translate_instance.translate(text);
-        self.update_label("翻訳結果\n" + translate_result);
+        translate_result = self._translate_word(word);
+        self._update_label("翻訳結果\n" + translate_result);
 
     def call_translate_process(self):
         """Call the translate process."""
@@ -97,7 +97,7 @@ class Window:
             if not self._is_mouse_position_between(self.mouse_x, self.mouse_y, text.position[0], text.position[1]):
                 continue;
             
-            word = self.search_word(text.content);
+            word = self._search_word(text.content);
             if not word or len(word) > 1:
                 continue;
 
@@ -119,7 +119,7 @@ class Window:
         size = self.screenshot_instance.get_size();
         return int(mouse_x - size[0] / 2), int(mouse_y - size[1] / 2);
 
-    def search_word(self, text):
+    def _search_word(self, text):
         """Search the word from the text."""
         pattern = r'\b[a-zA-Z]+\b'
         words = re.findall(pattern, text);
@@ -127,3 +127,6 @@ class Window:
             return words;
         return None;
 
+    def _translate_word(self, word):
+        """Translate the word."""
+        return self.translate_instance.translate(word);
